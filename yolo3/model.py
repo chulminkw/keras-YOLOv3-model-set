@@ -74,7 +74,7 @@ yolo3_model_map = {
     'yolo3_efficientnet_lite_spp': [yolo3lite_spp_efficientnet_body, 382, None],
 
     'yolo3_darknet': [yolo3_body, 185, None],
-    'yolo3_darknet_spp': [custom_yolo3_spp_body, 185, None],
+    'yolo3_darknet_spp': [custom_yolo3_spp_body, 185, 'weights/darknet53.h5'],
     #Doesn't have pretrained weights, so no need to return backbone length
     'yolo3_darknet_lite': [yolo3lite_body, 0, None],
     'yolo3_vgg16': [yolo3_vgg16_body, 19, None],
@@ -198,16 +198,12 @@ def get_yolo3_model(model_type, num_feature_layers, num_anchors, num_classes, in
             model_function = yolo3_model_map[model_type][0]
             backbone_len = yolo3_model_map[model_type][1]
             weights_path = yolo3_model_map[model_type][2]
-            ''' 2021.04.19일 weight path관계로 변경. '''
-            model_body = model_function(input_tensor, num_anchors // 3, num_classes)
-            if weights_path:
-                model_body.load_weights(weights_path)
-            '''
+
             if weights_path:
                 model_body = model_function(input_tensor, num_anchors//3, num_classes, weights_path=weights_path)
             else:
                 model_body = model_function(input_tensor, num_anchors//3, num_classes)
-            '''
+
         else:
             raise ValueError('This model type is not supported now')
     else:
@@ -217,7 +213,6 @@ def get_yolo3_model(model_type, num_feature_layers, num_anchors, num_classes, in
         model_body = get_pruning_model(model_body, begin_step=0, end_step=pruning_end_step)
 
     return model_body, backbone_len
-
 
 
 def get_yolo3_train_model(model_type, anchors, num_classes, weights_path=None, freeze_level=1, optimizer=Adam(lr=1e-3, decay=0), label_smoothing=0, elim_grid_sense=False, model_pruning=False, pruning_end_step=10000):
