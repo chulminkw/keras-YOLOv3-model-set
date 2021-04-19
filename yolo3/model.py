@@ -198,11 +198,16 @@ def get_yolo3_model(model_type, num_feature_layers, num_anchors, num_classes, in
             model_function = yolo3_model_map[model_type][0]
             backbone_len = yolo3_model_map[model_type][1]
             weights_path = yolo3_model_map[model_type][2]
-
+            ''' 2021.04.19일 weight path관계로 변경. '''
+            model_body = model_function(input_tensor, num_anchors // 3, num_classes)
+            if weights_path:
+                model_body.load_weights(weights_path)
+            '''
             if weights_path:
                 model_body = model_function(input_tensor, num_anchors//3, num_classes, weights_path=weights_path)
             else:
                 model_body = model_function(input_tensor, num_anchors//3, num_classes)
+            '''
         else:
             raise ValueError('This model type is not supported now')
     else:
