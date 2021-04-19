@@ -73,8 +73,8 @@ yolo3_model_map = {
     'yolo3_efficientnet_lite': [yolo3lite_efficientnet_body, 382, None],
     'yolo3_efficientnet_lite_spp': [yolo3lite_spp_efficientnet_body, 382, None],
 
-    'yolo3_darknet': [yolo3_body, 185, 'weights/darknet53.h5'],
-    'yolo3_darknet_spp': [custom_yolo3_spp_body, 185, 'weights/yolov3-spp.h5'],
+    'yolo3_darknet': [yolo3_body, 185, None],
+    'yolo3_darknet_spp': [custom_yolo3_spp_body, 185, None],
     #Doesn't have pretrained weights, so no need to return backbone length
     'yolo3_darknet_lite': [yolo3lite_body, 0, None],
     'yolo3_vgg16': [yolo3_vgg16_body, 19, None],
@@ -84,7 +84,7 @@ yolo3_model_map = {
 
     'yolo3_nano': [yolo3_nano_body, 268, None],
 
-    'yolo4_darknet': [yolo4_body, 250, 'weights/cspdarknet53.h5'],
+    'yolo4_darknet': [yolo4_body, 250, None],
     'yolo4_mobilenet': [yolo4_mobilenet_body, 87, None],
     'yolo4_mobilenet_lite': [yolo4lite_mobilenet_body, 87, None],
 
