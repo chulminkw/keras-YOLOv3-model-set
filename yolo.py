@@ -25,7 +25,8 @@ from yolo2.model import get_yolo2_model, get_yolo2_inference_model
 from yolo2.postprocess_np import yolo2_postprocess_np
 from common.data_utils import preprocess_image
 from common.utils import get_classes, get_anchors, get_colors, draw_boxes, optimize_tf_gpu
-from tensorflow.keras.utils import multi_gpu_model
+# tf2.4와의 호환을 위해 아래를 삭제.
+#from tensorflow.keras.utils import multi_gpu_model
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
@@ -35,10 +36,10 @@ optimize_tf_gpu(tf, K)
 #tf.enable_eager_execution()
 
 default_config = {
-        "model_type": 'tiny_yolo3_darknet',
-        "weights_path": os.path.join('weights', 'yolov3-tiny.h5'),
+        "model_type": 'yolo3_darknet',
+        "weights_path": None,
         "pruning_model": False,
-        "anchors_path": os.path.join('configs', 'tiny_yolo3_anchors.txt'),
+        "anchors_path": os.path.join('configs', 'yolo3_anchors.txt'),
         "classes_path": os.path.join('configs', 'coco_classes.txt'),
         "score" : 0.1,
         "iou" : 0.4,
@@ -70,8 +71,8 @@ class YOLO_np(object):
 
     def _generate_model(self):
         '''to generate the bounding boxes'''
-        weights_path = os.path.expanduser(self.weights_path)
-        assert weights_path.endswith('.h5'), 'Keras model or weights must be a .h5 file.'
+        weights_path = None
+        #assert weights_path.endswith('.h5'), 'Keras model or weights must be a .h5 file.'
 
         # Load model, or construct model and load weights.
         num_anchors = len(self.anchors)
@@ -105,9 +106,11 @@ class YOLO_np(object):
                 num_anchors/len(yolo_model.output) * (num_classes + 5), \
                 'Mismatch between model and given anchor and class sizes'
         print('{} model, anchors, and classes loaded.'.format(weights_path))
+        # tf2.4와의 호환을 위해 아래를 삭제.
+        '''
         if self.gpu_num>=2:
             yolo_model = multi_gpu_model(yolo_model, gpus=self.gpu_num)
-
+        '''
         return yolo_model
 
 
@@ -328,6 +331,8 @@ def main():
     '''
     Command line options
     '''
+
+    print('#######', YOLO.get_defaults("model_type"))
     parser.add_argument(
         '--model_type', type=str,
         help='YOLO model type: yolo3_mobilenet_lite/tiny_yolo3_mobilenet/yolo3_darknet/..., default ' + YOLO.get_defaults("model_type")
@@ -335,7 +340,7 @@ def main():
 
     parser.add_argument(
         '--weights_path', type=str,
-        help='path to model weight file, default ' + YOLO.get_defaults("weights_path")
+        help='path to model weight file, default '
     )
 
     parser.add_argument(
