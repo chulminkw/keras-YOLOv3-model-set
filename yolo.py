@@ -39,8 +39,9 @@ default_config = {
         "model_type": 'yolo3_darknet',
         "weights_path": None,
         "pruning_model": False,
-        "anchors_path": os.path.join('configs', 'yolo3_anchors.txt'),
-        "classes_path": os.path.join('configs', 'coco_classes.txt'),
+        # Kaggle notebook에서 호출하기 위해 아래 두개를 주석 처리함.
+        #"anchors_path": os.path.join('configs', 'yolo3_anchors.txt'),
+        #"classes_path": os.path.join('configs', 'coco_classes.txt'),
         "score" : 0.1,
         "iou" : 0.4,
         "model_image_size" : (416, 416),
