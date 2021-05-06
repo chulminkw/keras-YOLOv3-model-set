@@ -175,6 +175,8 @@ class YOLO(object):
         super(YOLO, self).__init__()
         self.__dict__.update(self._defaults) # set up default values
         self.__dict__.update(kwargs) # and update with user overrides
+        print('test')
+        print(self.classes_path)
         self.class_names = get_classes(self.classes_path)
         self.anchors = get_anchors(self.anchors_path)
         self.colors = get_colors(self.class_names)
